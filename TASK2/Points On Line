@@ -27,7 +27,6 @@ public class PointsOnLine {
             }
         }
 
-        // Output the total number of triplets
         System.out.println(counter);
     }
 
