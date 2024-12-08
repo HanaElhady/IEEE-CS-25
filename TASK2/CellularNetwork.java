@@ -18,14 +18,14 @@ public class CellularNetwork {
             cellularTowers[i] = reader.nextInt();
         }
         int minimal  = 0 ;
+        int right = 0 ;
+
         for(int left = 0 ; left < cities.length ; left++ ){
-            int right = 0 ;
-            int d = Integer.MAX_VALUE;
-            while(right < numberOfCellularTowers) {
-                d = Math.min(Math.abs(cellularTowers[right] - cities[left]) , d);
+            while (right < numberOfCellularTowers - 1 &&
+                    Math.abs(cellularTowers[right + 1] - cities[left]) <= Math.abs(cellularTowers[right] - cities[left])) {
                 right++;
             }
-            minimal = Math.max(minimal,d);
+            minimal = Math.max(minimal, Math.abs(cellularTowers[right] - cities[left]));
         }
 
         System.out.println(minimal);
