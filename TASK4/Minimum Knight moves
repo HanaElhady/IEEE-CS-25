@@ -1,0 +1,70 @@
+import java.util.*;
+
+public class Main {
+    static class Position {
+        int x, y, moves;
+
+        Position(int x, int y, int moves) {
+            this.x = x;
+            this.y = y;
+            this.moves = moves;
+        }
+    }
+    static boolean isValid(int x, int y) {
+        return x >= 1 && x <= 8 && y >= 1 && y <= 8;
+    }
+
+    static int[] convertToCoordinates(String position) {
+        return new int[]{position.charAt(0) - 'a' + 1, position.charAt(1) - '1' + 1};
+    }
+    static int minKnightMoves(String start, String end) {
+        if (start.equals(end)) return 0;
+
+        int[] dx = {2, 2, -2, -2, 1, 1, -1, -1};
+        int[] dy = {1, -1, 1, -1, 2, -2, 2, -2};
+
+        int[] startPos = convertToCoordinates(start);
+        int[] endPos = convertToCoordinates(end);
+
+        Queue<Position> queue = new LinkedList<>();
+        boolean[][] visited = new boolean[9][9];
+
+        queue.add(new Position(startPos[0], startPos[1], 0));
+        visited[startPos[0]][startPos[1]] = true;
+
+        while (!queue.isEmpty()) {
+            Position current = queue.poll();
+
+            if (current.x == endPos[0] && current.y == endPos[1]) {
+                return current.moves;
+            }
+
+            for (int i = 0; i < 8; i++) {
+                int newX = current.x + dx[i];
+                int newY = current.y + dy[i];
+
+                if (isValid(newX, newY) && !visited[newX][newY]) {
+                    visited[newX][newY] = true;
+                    queue.add(new Position(newX, newY, current.moves + 1));
+                }
+            }
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        int T = scanner.nextInt();
+        scanner.nextLine();
+
+        for (int t = 0; t < T; t++) {
+            String[] input = scanner.nextLine().split(" ");
+            String start = input[0];
+            String end = input[1];
+
+            System.out.println(minKnightMoves(start, end));
+        }
+
+    }
+}
