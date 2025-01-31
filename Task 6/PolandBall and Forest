@@ -1,6 +1,6 @@
 import java.util.*;
 
-public class Stack {
+public class PolandBallAndForest {
     public static int countTrees(int[] p) {
         int n = p.length;
         List<List<Integer>> adjList = new ArrayList<>();
