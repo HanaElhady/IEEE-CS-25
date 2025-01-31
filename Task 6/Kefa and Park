@@ -1,0 +1,66 @@
+// https://codeforces.com/problemset/problem/580/C
+
+import java.util.*;
+
+public class KefaAndPark {
+    static int validPaths = 0;
+    public static int validPath(int n, int m, int[][] edges, int[] cats) {
+        List<List<Integer>> adj_List = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj_List.add(new ArrayList<>());
+        }
+        for (int[] edge : edges) {
+            adj_List.get(edge[0]).add(edge[1]);
+            adj_List.get(edge[1]).add(edge[0]);
+        }
+
+        boolean[] visited = new boolean[n];
+        dfs(0, -1, adj_List, visited, cats, m, 0);
+
+        return validPaths;
+    }
+
+    public static void dfs(int node, int parent, List<List<Integer>> adj_List, boolean[] visited, int[] cats, int m, int consecutiveCats) {
+        visited[node] = true;
+
+        if (consecutiveCats > m) {
+            return;
+        }
+
+        if (cats[node] == 1) {
+            consecutiveCats++;
+        } else {
+            consecutiveCats = 0;
+        }
+
+        boolean isLeaf = true;
+
+        for (int neighbor : adj_List.get(node)) {
+            if (!visited[neighbor]) {
+                isLeaf = false;
+                dfs(neighbor, node, adj_List, visited, cats, m, consecutiveCats);
+            }
+        }
+
+        if (isLeaf && consecutiveCats <= m) {
+            validPaths++;
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int numberOfVertices = sc.nextInt();
+        int maximumConsecutiveOkCats = sc.nextInt();
+        int[] cats = new int[numberOfVertices];
+        for (int i = 0; i < numberOfVertices; i++) {
+            cats[i] = sc.nextInt();
+        }
+
+        int[][] edges = new int[numberOfVertices - 1][2];
+        for (int i = 0; i < numberOfVertices - 1; i++) {
+            edges[i][0] = sc.nextInt() - 1;
+            edges[i][1] = sc.nextInt() - 1;
+        }
+        System.out.println(validPath(numberOfVertices, maximumConsecutiveOkCats, edges, cats));
+    }
+}
