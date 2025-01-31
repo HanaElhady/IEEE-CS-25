@@ -1,0 +1,52 @@
+import java.util.*;
+
+public class Stack {
+    public static int countTrees(int[] p) {
+        int n = p.length;
+        List<List<Integer>> adjList = new ArrayList<>();
+        
+        for (int i = 0; i < n; i++) {
+            adjList.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < n; i++) {
+            if (p[i] != i + 1) { 
+                adjList.get(i).add(p[i] - 1);
+                adjList.get(p[i] - 1).add(i);
+            }
+        }
+
+        boolean[] visited = new boolean[n];
+        int treeCount = 0;
+
+        for (int i = 0; i < n; i++) {
+            if (!visited[i]) {
+                treeCount++;
+                dfs(i, adjList, visited);
+            }
+        }
+
+        return treeCount;
+    }
+
+    public static void dfs(int node, List<List<Integer>> adjList, boolean[] visited) {
+        visited[node] = true;
+        for (int neighbor : adjList.get(node)) {
+            if (!visited[neighbor]) {
+                dfs(neighbor, adjList, visited);
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+        int numberOfBalls = sc.nextInt();
+        int[] p = new int[numberOfBalls];
+
+        for (int i = 0; i < numberOfBalls; i++) {
+            p[i] = sc.nextInt();
+        }
+
+        System.out.println(countTrees(p));
+    }
+}
