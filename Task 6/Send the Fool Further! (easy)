@@ -1,0 +1,49 @@
+import java.util.*;
+
+public class FoolFurther {
+
+    static class Pair {
+        int node, cost;
+        public Pair(int node, int cost) {
+            this.node = node;
+            this.cost = cost;
+        }
+    }
+
+    public static int dfs(int node, List<List<Pair>> adj, boolean[] visited) {
+        visited[node] = true;
+        int maxCost = 0;
+
+        for (Pair neighbor : adj.get(node)) {
+            if (!visited[neighbor.node]) {
+                int costFromNeighbor = dfs(neighbor.node, adj, visited) + neighbor.cost;
+                maxCost = Math.max(maxCost, costFromNeighbor);
+            }
+        }
+
+        return maxCost;
+    }
+
+    public static void main(String[] args) {
+        Scanner sc = new Scanner(System.in);
+
+        int n = sc.nextInt();
+        List<List<Pair>> adj = new ArrayList<>();
+        for (int i = 0; i < n; i++) {
+            adj.add(new ArrayList<>());
+        }
+
+        for (int i = 0; i < n - 1; i++) {
+            int u = sc.nextInt();
+            int v = sc.nextInt();
+            int c = sc.nextInt();
+
+            adj.get(u).add(new Pair(v, c));
+            adj.get(v).add(new Pair(u, c));
+        }
+
+        boolean[] visited = new boolean[n];
+        int maxCost = dfs(0, adj, visited);
+        System.out.println(maxCost);
+    }
+}
